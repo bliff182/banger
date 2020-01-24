@@ -4,19 +4,18 @@ $(document).ready(() => {
 		for (let i = 0; i < data.length; i++) {
 			if (data[i].summary) {
 				$("#articles").append(
-					`<div class='article' data-id='${data[i]._id}'><p class='headline'>${data[i].headline}</p><p class='summary'>${data[i].summary}</p><a href='${data[i].url}' target=_'blank'>Link to Article</a></div><br />`
+					`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' id='comment-btn'>Leave a Comment!</button></div><br />`
 				);
 			} else {
 				$("#articles").append(
-					`<div class='article' data-id='${data[i]._id}'><p class='headline'>${data[i].headline}</p><a href='${data[i].url}' target='_blank'>Link to Article</a></div><br />`
+					`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' id='comment-btn'>Leave a Comment!</button></div><br />`
 				);
 			}
 		}
 
-		// Whenever someone clicks an `.article` class div
-		// $(document).on('click', '.article', () => {
+		// $(document).on('click', '#comment-btn', () => {
 		// ^^ This doesn't work when arrow function is used ^^
-		$(document).on("click", ".article", function() {
+		$(document).on("click", "#comment-btn", function() {
 			$("#notes").empty();
 
 			// Save the data-id from the clicked div
@@ -30,7 +29,7 @@ $(document).ready(() => {
 				// url: "/articles/" + thisId
 			}).then(data => {
 				console.log(data);
-				$("#notes").append(`<h2>${data.headline}</h2`);
+				$("#notes").append(`<h4>${data.headline}</h4`);
 				$("#notes").append('<input id="titleinput" name="title" >');
 				$("#notes").append('<textarea id="bodyinput" name="body"></textarea>');
 				$("#notes").append(
