@@ -1,15 +1,15 @@
-const express = require('express');
-const logger = require('morgan');
-const mongoose = require('mongoose');
+const express = require("express");
+const logger = require("morgan");
+const mongoose = require("mongoose");
 
 // Scraping tools
 // Axios is a promise-bassed http library, similar to jQuery's Ajax method
 // It works on both the client and the server
-const axios = require('axios');
-const cheerio = require('cheerio');
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 // Require all models
-const db = require('./models');
+const db = require("./models");
 
 const PORT = 3000;
 
@@ -19,46 +19,46 @@ const app = express();
 // Configure middleware
 
 // Use morgan logger for logging requests
-app.use(logger('dev'));
+app.use(logger("dev"));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // Connect to the Mongo DB
 const MONGODB_URI =
-	process.env.MONGODB_URI || 'mongodb://localhost/mongoHeadlines';
+	process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
-mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 
 // A GET route for scraping The Onion website
-app.get('/scrape', (req, res) => {
+app.get("/scrape", (req, res) => {
 	// First, we grab the body of the html with axios
-	axios.get('https://www.theonion.com/').then(response => {
+	axios.get("https://www.theonion.com/").then(response => {
 		// Then, we load that into cheerio and save it to $ for a shorthand selector (jQuery style)
 		let $ = cheerio.load(response.data);
 
 		// Now, we grab every article tag and do the following
-		$('article').each((i, element) => {
+		$("article").each((i, element) => {
 			// Save an empty result object
 			let result = {};
 
 			// Grab the text of the h4 and p tags nested in the article, as well as the href of the nested link
 			// Save them as properties of the result object
 			result.headline = $(element)
-				.find('h4')
+				.find("h4")
 				.text()
 				.trim();
 			result.summary = $(element)
-				.find('p')
+				.find("p")
 				.text()
 				.trim();
 			result.url = $(element)
-				.find('a')
-				.attr('href');
+				.find("a")
+				.attr("href");
 
 			// If there are defined headlines and urls within the article tag, create a new Article using the 'result' object built from scraping
 			// Not requiring summary because there are a lot of articles without one
@@ -77,12 +77,12 @@ app.get('/scrape', (req, res) => {
 		});
 
 		// Send a message to the client
-		res.send('Scraped.');
+		res.send("Scraped.");
 	});
 });
 
 // Route for getting all Articles from the db
-app.get('/articles', (req, res) => {
+app.get("/articles", (req, res) => {
 	// Grab every document in the Articles collection
 	db.Article.find({})
 		.then(dbArticle => {
@@ -96,11 +96,11 @@ app.get('/articles', (req, res) => {
 });
 
 // Route for grabbing a specific Article by id, and populate it with its note
-app.get('/aritcles/:id', (req, res) => {
+app.get("/articles/:id", (req, res) => {
 	// Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
 	db.Article.findOne({ _id: req.params.id })
 		// ...and populate all of the notes associated with it
-		.populate('note')
+		.populate("note")
 		.then(dbArticle => {
 			// If we were able to successfully find an Article with the given id, send it back to the client
 			res.json(dbArticle);
@@ -112,16 +112,16 @@ app.get('/aritcles/:id', (req, res) => {
 });
 
 // Route for saving/updating an Article's associated Note
-app.post('/articles/:id', (req, res) => {
+app.post("/articles/:id", (req, res) => {
 	// Create a new note and pass the req.body to the entry
 	db.Note.create(req.body)
 		.then(dbNote => {
 			// If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
 			// { new: true } tells the query that we want it to return the updated User -- it returns the original by default
 			// Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-			return dbArticle.findOneAndUpdate(
+			return db.Article.findOneAndUpdate(
 				{ _id: req.params.id },
-				{ node: dbNote._id },
+				{ note: dbNote._id },
 				{ new: true }
 			);
 		})
