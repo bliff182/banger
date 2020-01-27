@@ -90,7 +90,6 @@ app.get("/articles", (req, res) => {
 			res.json(dbArticle);
 		})
 		.catch(err => {
-			// If an error occurred, send it to the client
 			res.json(err);
 		});
 });
@@ -106,7 +105,6 @@ app.get("/articles/:id", (req, res) => {
 			res.json(dbArticle);
 		})
 		.catch(err => {
-			// If an error occurred, send it to the client
 			res.json(err);
 		});
 });
@@ -130,7 +128,6 @@ app.post("/articles/:id", (req, res) => {
 			res.json(dbArticle);
 		})
 		.catch(err => {
-			// If an error occurred, send it to the client
 			res.json(err);
 		});
 });
