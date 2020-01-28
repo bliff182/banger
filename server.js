@@ -134,6 +134,26 @@ app.post("/articles/:id", (req, res) => {
 		});
 });
 
+// Route to delete a Note
+app.delete("/notes/:id", (req, res) => {
+	db.Note.findOneAndRemove({ _id: req.params.id }, err => {
+		if (err) return handleError(err);
+	})
+		.then(dbNote => {
+			return dbArticle.findOneandUpdate(
+				{ note: dbNote._id },
+				{ $pull: { note: dbNote._id } },
+				{ new: true }
+			);
+		})
+		.then(dbArticle => {
+			res.json(dbArticle);
+		})
+		.catch(err => {
+			res.json(err);
+		});
+});
+
 app.listen(PORT, () => {
 	console.log(`App running on port ${PORT}!`);
 });

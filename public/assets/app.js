@@ -1,42 +1,53 @@
-$(document).ready(function() {
-	function renderArticles(data) {
-		// Loop through articles collection and append headline, summary, and url to #articles div
-		for (let i = 0; i < data.length; i++) {
-			if (data[i].summary) {
-				$("#articles").append(
-					`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p> class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
-				);
-			} else {
-				$("#articles").append(
-					`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
-				);
-			}
-		}
-	}
-
-	function renderModal(data) {
-		// Add text of headline to modal header
-		$("#commentModalLabel").text(data.headline);
-		//Add a title input and textarea to modal body
-		$(".modal-body").append(
-			`<form><div class='form-group'><input type='text' class='form-control' id='commentTitle' placeholder='Comment title'></div><div class='form-group'><textarea class='form-control' id='commentTextarea' rows='3' placeholder='Leave a comment!'></textarea></div></form>`
-		);
-		// If there's a note in the article, display it
-		if (data.note.length > 0) {
-			for (let i = 0; i < data.note.length; i++) {
-				$(".modal-body").prepend(
-					`<div class='card' style='width: 29rem;'><div class='card-body'><h5 class='card-title'>${data.note[i].title}</h5><p class='card-text'>${data.note[i].body}</p><button class='btn btn-danger' id='deleteNote'>X</button></div></div><br />`
-				);
-			}
+function renderArticles(data) {
+	// Loop through articles collection and append headline, summary, and url to #articles div
+	for (let i = 0; i < data.length; i++) {
+		if (data[i].summary) {
+			$("#articles").append(
+				`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
+			);
 		} else {
-			$(".modal-body").prepend("<p>No comments yet for this article.</p>");
+			$("#articles").append(
+				`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
+			);
 		}
 	}
+}
+
+function renderModal(data) {
+	// Add text of headline to modal header
+	$("#commentModalLabel").text(data.headline);
+	//Add a title input and textarea to modal body
+	$(".modal-body").append(
+		`<form><div class='form-group'><input type='text' class='form-control' id='commentTitle' placeholder='Comment title'></div><div class='form-group'><textarea class='form-control' id='commentTextarea' rows='3' placeholder='Leave a comment!'></textarea></div></form>`
+	);
+	// If there's a note in the article, display it
+	if (data.note.length > 0) {
+		for (let i = 0; i < data.note.length; i++) {
+			$(".modal-body").prepend(
+				`<div class='card' style='width: 29rem;'><div class='card-body'><h5 class='card-title'>${data.note[i].title}</h5><p class='card-text'>${data.note[i].body}</p><button class='btn btn-danger' data-dismiss='modal' id='deleteNote' data-id='${data.note[i]._id}'>X</button></div></div><br />`
+			);
+		}
+	} else {
+		$(".modal-body").prepend("<p>No comments yet for this article.</p>");
+	}
+}
+
+$(document).ready(function() {
+	// Append existing articles on page load
+	$.getJSON("/articles/", data => renderArticles(data));
+
+	// Scrape button is clicked
+	$("#scrapeBtn").on("click", function() {
+		$.get("/scrape/").then(function() {
+			// Grab the articles as a json
+			$.getJSON("/articles/", data => renderArticles(data));
+		});
+	});
 
 	// Grab the articles as a json
-	$.getJSON("/articles", data => {
-		renderArticles(data);
-	});
+	// $.getJSON("/articles", data => {
+	// 	renderArticles(data);
+	// });
 
 	// $(document).on('click', '#comment-btn', () => {
 	// ^^ This doesn't work when arrow function is used ^^
@@ -75,6 +86,17 @@ $(document).ready(function() {
 			}
 		}).then(data => {
 			console.log(data);
+		});
+	});
+
+	// Deleting a note
+	$(document).on("click", "#deleteNote", function() {
+		let thisId = $(this).attr("data-id");
+		$.ajax({
+			method: "DELETE",
+			url: `/notes/${thisId}`
+		}).then(function() {
+			console.log(`Deleted note with ID ${thisId}`);
 		});
 	});
 });
