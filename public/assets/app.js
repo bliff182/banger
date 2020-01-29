@@ -3,11 +3,11 @@ function renderArticles(data) {
 	for (let i = 0; i < data.length; i++) {
 		if (data[i].summary) {
 			$("#articles").append(
-				`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
+				`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
 			);
 		} else {
 			$("#articles").append(
-				`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><br /><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
+				`<div class='article' data-id='${data[i]._id}'><h4 class='headline'><a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a></h4><p class='summary'>${data[i].summary}</p><button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
 			);
 		}
 	}
@@ -24,7 +24,7 @@ function renderModal(data) {
 	if (data.note.length > 0) {
 		for (let i = 0; i < data.note.length; i++) {
 			$(".modal-body").prepend(
-				`<div class='card' style='width: 29rem;'><div class='card-body'><h5 class='card-title'>${data.note[i].title}</h5><p class='card-text'>${data.note[i].body}</p><button class='btn btn-danger' data-dismiss='modal' id='deleteNote' data-id='${data.note[i]._id}'>X</button></div></div><br />`
+				`<div class='card'><div class='card-body'><h5 class='card-title'>${data.note[i].title}</h5><p class='card-text'>${data.note[i].body}</p><button class='btn btn-danger' data-dismiss='modal' id='deleteNote' data-id='${data.note[i]._id}'>&times;</button></div></div><br />`
 			);
 		}
 	} else {

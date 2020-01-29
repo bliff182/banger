@@ -1,8 +1,68 @@
+body {
+  background-color: #28a746;
+  /* background-image: url("../assets/img/vintage-wallpaper/vintage-wallpaper.png"); */
+}
+
+#title,
+#title-desc,
+nav {
+  font-family: "Bitter", serif;
+}
+
 #onion-logo {
   max-width: 10%;
+  margin-bottom: 20px;
 }
 
 .article {
-  border: 1px dashed black;
-  padding: 10px;
+  background-color: #e9ecef;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+}
+
+.article-url {
+  color: black;
+}
+
+.headline,
+.summary,
+button {
+  font-family: "Lato", sans-serif;
+}
+
+.headline {
+  font-weight: bold;
+}
+
+.jumbotron,
+.article,
+nav,
+.modal-content,
+#onion-logo {
+  box-shadow: 5px 5px 10px;
+}
+
+/* .modal-content {
+  margin-left: -20%;
+  width: 150%;
+} */
+
+.modal-body {
+  position: relative;
+}
+
+.card {
+  width: 29rem;
+}
+
+.card {
+  box-shadow: 1px 1px 2px;
+}
+
+#deleteNote {
+  position: absolute;
+  top: 7px;
+  right: 10px;
 }

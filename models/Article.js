@@ -14,12 +14,14 @@ const ArticleSchema = new Schema({
 	},
 	// `summary` is of type String but not required
 	summary: {
-		type: String
+		type: String,
+		unique: true
 		// required: true
 	},
 	// `url` is required and of type String
 	url: {
 		type: String,
+		unique: true,
 		required: true
 	},
 	// `note` is an object that stores a Note id

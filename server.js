@@ -120,10 +120,6 @@ app.post("/articles/:id", (req, res) => {
 				{ $push: { note: dbNote._id } },
 				{ new: true }
 			);
-			// 	{ _id: req.params.id },
-			// 	{ note: dbNote._id },
-			// 	{ new: true }
-			// );
 		})
 		.then(dbArticle => {
 			// If we were able to successfully update an Article, send it back to the client
