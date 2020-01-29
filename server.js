@@ -28,7 +28,9 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 const MONGODB_URI =
-	process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+	// process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+	process.env.MONGODB_URI ||
+	"mongodb://user1:password1@ds139675.mlab.com:39675/heroku_zflp0165";
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
