@@ -38,6 +38,8 @@ $(document).ready(function() {
 
 	// Scrape button is clicked
 	$("#scrapeBtn").on("click", function() {
+		// Empty div so articles don't stack
+		$("#articles").empty();
 		$.get("/scrape/").then(function() {
 			// Grab the articles as a json
 			$.getJSON("/articles/", data => renderArticles(data));
