@@ -1,25 +1,14 @@
 function renderArticles(data) {
 	// Loop through articles collection and append headline, summary, and url to #articles div
 	for (let i = 0; i < data.length; i++) {
-		if (data[i].summary) {
-			$("#articles").append(
-				`<div class='article' data-id='${data[i]._id}'>
+		$("#articles").append(
+			`<div class='article' data-id='${data[i]._id}'>
 				<h4 class='headline'>
 				<a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a>
 				</h4>
 				<p class='summary'>${data[i].summary}</p>
 				<button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
-			);
-		} else {
-			$("#articles").append(
-				`<div class='article' data-id='${data[i]._id}'>
-				<h4 class='headline'>
-				<a class='article-url' href='${data[i].url}' target='_blank'>${data[i].headline}</a>
-				</h4>
-				<p class='summary'>${data[i].summary}</p>
-				<button type='button' class='btn btn-success' data-id='${data[i]._id}' data-toggle='modal' data-target='#commentModal' id='comment-btn'>View Comments</button>`
-			);
-		}
+		);
 	}
 }
 
